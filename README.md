@@ -1,16 +1,120 @@
-# React + Vite
+# 🌤️ Weather App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive weather application built with React. The application provides real-time weather information with a clean and attractive user interface.
 
-Currently, two official plugins are available:
+## 🌐 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Coming Soon
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🌡️ Display current temperature
+- ☁️ Display current weather condition
+- 📉 Display minimum temperature
+- 📈 Display maximum temperature
+- 🕒 Real-time date and clock
+- 🌍 Arabic language support
+- 📍 Weather information for Latakia, Syria
+- 🔄 Fetch real-time weather data
+- 🎨 Modern and responsive user interface
+- 📱 Responsive design
+- 🌤️ Dynamic weather icons
 
-## Expanding the ESLint configuration
+## 🛠️ Technologies Used
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This project was built using:
+
+- React
+- Vite
+- Material UI
+- Axios
+- Moment.js
+- OpenWeatherMap API
+- CSS
+
+## 🚀 Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/mohanad-hasan/Weather-App.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd Weather-App
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Open your browser and visit:
+
+```text
+http://localhost:5173
+```
+
+## 🔑 API Configuration
+
+This project uses the OpenWeatherMap API to fetch weather data.
+
+To use the project, create your own API key from OpenWeatherMap.
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_WEATHER_API_KEY=YOUR_API_KEY
+```
+
+Then use it in your project:
+
+```javascript
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+```
+
+Example API request:
+
+```javascript
+const response = await axios.get(
+  `https://api.openweathermap.org/data/2.5/weather?lat=35.5317&lon=35.7901&units=metric&appid=${API_KEY}`
+);
+```
+
+## 📍 Current Location
+
+The application currently displays weather information for:
+
+**Latakia, Syria 🇸🇾**
+
+- Latitude: `35.5317`
+- Longitude: `35.7901`
+
+## 🎯 Future Improvements
+
+- [ ] Add city search functionality
+- [ ] Add 5-day weather forecast
+- [ ] Add hourly weather forecast
+- [ ] Automatically detect user location
+- [ ] Add dark/light mode
+- [ ] Improve weather animations
+- [ ] Add more detailed weather information
+
+## 👨‍💻 Author
+
+**Mohanad Hasan**
+
+GitHub: https://github.com/mohanad-hasan
+
+---
+
+⭐ If you like this project, don't forget to give it a star!
