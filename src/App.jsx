@@ -9,10 +9,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import CloudIcon from '@mui/icons-material/Cloud';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
-//EXTERNAL LIBRARIES
-import axios from 'axios';
+//EXTERNAL LIBRARIES  
 import moment from 'moment/min/moment-with-locales';
+
+//IMPORT REDUX
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchWeather } from './features/weatherApi/weatherApiSlice';
 
 moment.locale('ar');
 
@@ -23,7 +27,8 @@ const theme = createTheme({
 });
 
 function App() {
-  const [weatherData, setWeatherData] = useState({temperature: null, description: '', minTemp: null, maxTemp: null, temperatureIcon: null});
+  const dispatch = useDispatch();
+  const { data: weatherData, status, error } = useSelector((state) => state.weather);
   const [dateAndTime, setDateAndTime] = useState("");
   const { t, i18n } = useTranslation();
   const [local, setLocal] = useState('ar');
@@ -58,27 +63,8 @@ function App() {
   }, [local]);
 
   useEffect(() => {
-    const fetchWeatherData = async () => {
-      try {
-        const response = await axios.get('https://api.openweathermap.org/data/2.5/weather?lat=35.5317&lon=35.7901&units=metric&appid=53ad33e974eb1dd3fd997e9608fc9ebe');
-        const weatherTemp = Math.round(response.data.main.temp);
-        const weatherDescription = response.data.weather[0].description;
-        const weatherMinTemp = Math.round(response.data.main.temp_min);
-        const weatherMaxTemp = Math.round(response.data.main.temp_max);
-        const weatherIcon = response.data.weather[0].icon;
-        setWeatherData({
-          temperature: weatherTemp,
-          description: weatherDescription,
-          minTemp: weatherMinTemp,
-          maxTemp: weatherMaxTemp,
-          temperatureIcon: `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`
-        });
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-      }
-    };
-    fetchWeatherData();
-  }, []);
+    dispatch(fetchWeather());
+  }, [dispatch]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -109,18 +95,25 @@ function App() {
                       <div style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:'100%'}}>
                         {/* START WEATHER DEGRE AND DESCRIPTION */}
                           <div style={{display:'flex',flexDirection:'column',justifyContent:'start',alignItems:'start',marginRight:'10px'}}>
-                            <div style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                              <h3 style={{fontSize:'80px'}}>{weatherData.temperature !== null ? weatherData.temperature : '28'}</h3>
-                              {weatherData.temperatureIcon && (
-                                <img src={weatherData.temperatureIcon} alt="Weather Icon" style={{width:'100px',height:'100px'}} />
-                              )}
-                            </div>
-                            <p>{t(weatherData.description)}</p>
-                            <div style={{display:'flex',flexDirection:'row',justifyContent:'start',alignItems:'start',marginTop:'10px'}}>
-                              <p>{t('min')} : {weatherData.minTemp !== null ? weatherData.minTemp : '28'}</p>
-                              <span style={{margin:'0 10px'}}>|</span>
-                              <p>{t('max')} : {weatherData.maxTemp !== null ? weatherData.maxTemp : '28'}</p>
-                            </div>
+                            {status === 'loading' ? (
+                              <CircularProgress enableTrackSlot size="3rem" aria-label="Loading…" style={{color:'white'}}/>
+                            ) : status === 'failed' ? (
+                              <p>{t('error')}: {error}</p>
+                            ) : (
+                            <>
+                              <div style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                                <h3 style={{fontSize:'80px'}}>{weatherData.temperature !== null ? weatherData.temperature : '28'}</h3>
+                                {weatherData.temperatureIcon && (
+                                  <img src={weatherData.temperatureIcon} alt="Weather Icon" style={{width:'100px',height:'100px'}} />
+                                )}
+                              </div>
+                              <p>{t(weatherData.description)}</p>
+                              <div style={{display:'flex',flexDirection:'row',justifyContent:'start',alignItems:'start',marginTop:'10px'}}>
+                                <p>{t('min')} : {weatherData.minTemp !== null ? weatherData.minTemp : '28'}</p>
+                                <span style={{margin:'0 10px'}}>|</span>
+                                <p>{t('max')} : {weatherData.maxTemp !== null ? weatherData.maxTemp : '28'}</p>
+                              </div>
+                            </>)}
                           </div>
                         {/* END WEATHER DEGRE AND DESCRIPTION */}
                         {/* START WEATHER ICON */}
